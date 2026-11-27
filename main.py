@@ -38,11 +38,12 @@ import ganzenbord
 import domino
 import reversi
 import duel
+import bezorger
 import online
 import json
 import secrets
 
-VERSIE = "0.18.1"
+VERSIE = "0.19.0"
 W, H = 1280, 800
 
 
@@ -96,6 +97,9 @@ TX = {
     "lingo_c3": ("Om de beurt met de computer - moeilijk", "Take turns with the computer - hard"),
     "rev": ("Reversi", "Reversi"), "rev_sub": ("Sluit zijn schijven in, dan draaien ze om", "Trap his discs and they flip over"),
     "online_rev": ("Reversi online", "Reversi online"),
+    "bez": ("DraveBezorger", "DravePaperRound"), "bez_sub": ("Fiets door de straat en bezorg de krant", "Ride down the street and deliver the paper"),
+    "bez_1": ("Rustig - 5 levens, krant in de tuin telt ook", "Easy - 5 lives, a paper on the lawn counts too"),
+    "bez_2": ("Normaal", "Normal"), "bez_3": ("Pittig - meer honden en auto's", "Hard - more dogs and cars"),
     "duel": ("DraveMagie", "DraveMagic"), "duel_sub": ("Kaartspel: wezens, spreuken en draken", "Card game: creatures, spells and dragons"),
     "domino": ("Domino", "Dominoes"), "domino_sub": ("Leg aan met hetzelfde aantal ogen", "Match the same number of pips"),
     "online_domino": ("Domino online", "Dominoes online"),
@@ -227,6 +231,10 @@ TX = {
                      "Aanvallen: klik je wezen, dan een vijandelijk wezen of de held. Ze slaan elkaar met hun kracht (geel) van hun leven (rood) af.\n"
                      "Wacht (gouden rand) moet eerst verslagen worden. Wolven worden sterker in een roedel. Breng de ander naar 0: gewonnen!\n"
                      "Hulp aan: groen = dit kan je nu doen. Tip (of de T-toets) wijst de beste zet aan. Muis op een kaart = grote kaart met uitleg.\n"
+                     "DRAVEBEZORGER: je fietst vanzelf door de straat. Pijl omhoog = sneller, omlaag = langzamer, links/rechts = sturen, spatie = krant gooien.\n"
+                     "Gouden vlaggetje op de brievenbus = abonnee. In de bus = 250 punten, op de deurmat = 100. Mis je er een, dan zegt hij op.\n"
+                     "Ruitje bij een ander huis = 50 punten, maar niet bij een abonnee! Pas op voor honden, maaiers, skaters, auto's, putten en heggen.\n"
+                     "Stapel kranten op de stoep = +10 kranten. Aan het eind: het oefenparcours. Perfecte dag = nieuwe abonnee. Haal de zondag! P = pauze.\n"
                      "DOMINO: iedereen krijgt 7 stenen, de rest ligt in de pot. Om de beurt leg je een steen aan een uiteinde.\n"
                      "Het aantal ogen moet gelijk zijn aan het uiteinde. Past geen steen, dan pak je er een uit de pot. Is de pot leeg: passen.\n"
                      "Wie het eerst al zijn stenen kwijt is, wint en krijgt de ogen van de ander als punten. Kan niemand meer: minste ogen wint.\n"
@@ -293,6 +301,10 @@ TX = {
                      "Attack: click your creature, then an enemy creature or the hero. They hit each other's health (red) with their power (yellow).\n"
                      "Guards (gold border) must be defeated first. Wolves grow stronger in a pack. Bring the other to 0: you win!\n"
                      "Help on: green = you can do this now. Tip (or the T key) points at the best move. Mouse on a card = big card with explanation.\n"
+                     "DRAVEPAPERROUND: you ride down the street by yourself. Up = faster, down = slower, left/right = steer, space = throw a paper.\n"
+                     "Gold flag on the mailbox = subscriber. In the box = 250 points, on the doormat = 100. Miss one and he cancels.\n"
+                     "A window at another house = 50 points, but not at a subscriber! Watch out for dogs, mowers, skaters, cars, drains and hedges.\n"
+                     "Stack of papers on the pavement = +10 papers. At the end: the training course. Perfect day = new subscriber. Make it to Sunday! P = pause.\n"
                      "DOMINOES: everyone gets 7 stones, the rest is the pile. Take turns adding a stone to an end.\n"
                      "The number of pips must match that end. No stone fits? Draw one from the pile. Pile empty: pass.\n"
                      "First to play all stones wins and scores the other's pips. If nobody can move: fewest pips wins.\n"
@@ -348,12 +360,16 @@ NIEUW.update({
              "keuzes": [("comp_mak", 1), ("comp_normaal", 2), ("comp_moeilijk", 3)]},
 })
 NIEUW.update({
+    "bez": {"mod": "bezorger", "klasse": "Bezorger", "online": None,
+            "keuzes": [("bez_1", 1), ("bez_2", 2), ("bez_3", 3)]},
+})
+NIEUW.update({
     "sudoku": {"mod": "sudoku", "klasse": "Sudoku", "online": None,
                "keuzes": [("sud_1", 1), ("sud_2", 2), ("sud_3", 3)]},
 })
 SPEL_SCHERMEN = ("bg", "topo", "vier", "zee", "wie", "dam", "schaak", "galg", "memo") + tuple(NIEUW)
 REGEL_KOP = {"bg": ("BACKGAMMON", "BACKGAMMON"), "topo": ("TOPOGRAFIE", "TOPOGRAPHY"), "vier": ("VIER OP EEN RIJ", "CONNECT FOUR"),
-             "zee": ("ZEESLAG", "BATTLESHIP"), "wie": ("WIE BEN IK?", "GUESS WHO?"), "dam": ("DAMMEN", "DRAUGHTS"), "schaak": ("SCHAKEN", "CHESS"), "galg": ("GALGJE", "HANGMAN"), "memo": ("MEMORY", "MEMORY"), "lingo": ("LINGO", "LINGO"), "sudoku": ("SUDOKU", "SUDOKU"), "puzzel": ("PUZZEL", "PUZZLE"), "pest": ("PESTEN", "CRAZY EIGHTS"), "gans": ("GANZENBORD", "GAME OF THE GOOSE"), "domino": ("DOMINO", "DOMINOES"), "rev": ("REVERSI", "REVERSI"), "duel": ("DRAVEMAGIE", "DRAVEMAGIC")}
+             "zee": ("ZEESLAG", "BATTLESHIP"), "wie": ("WIE BEN IK?", "GUESS WHO?"), "dam": ("DAMMEN", "DRAUGHTS"), "schaak": ("SCHAKEN", "CHESS"), "galg": ("GALGJE", "HANGMAN"), "memo": ("MEMORY", "MEMORY"), "lingo": ("LINGO", "LINGO"), "sudoku": ("SUDOKU", "SUDOKU"), "puzzel": ("PUZZEL", "PUZZLE"), "pest": ("PESTEN", "CRAZY EIGHTS"), "gans": ("GANZENBORD", "GAME OF THE GOOSE"), "domino": ("DOMINO", "DOMINOES"), "rev": ("REVERSI", "REVERSI"), "duel": ("DRAVEMAGIE", "DRAVEMAGIC"), "bez": ("DRAVEBEZORGER", "DRAVEPAPERROUND")}
 
 
 def regels_voor(scherm):
@@ -1612,8 +1628,9 @@ class App:
                   ("puzzel", "puzzel_sub", lambda: self.kies_nieuw("puzzel"), True),
                   ("sudoku", "sudoku_sub", lambda: self.kies_nieuw("sudoku"), True),
                   ("duel", "duel_sub", lambda: self.kies_nieuw("duel"), True),
+                  ("bez", "bez_sub", lambda: self.kies_nieuw("bez"), True),
                   ("meer", "meer_sub", None, False)]
-        kol = 3 if len(tegels) <= 6 else 4 if len(tegels) <= 12 else 6
+        kol = 3 if len(tegels) <= 6 else 4 if len(tegels) <= 12 else 6 if len(tegels) <= 18 else 7
         tus = 20 if kol < 6 else 14
         rijen = (len(tegels) + kol - 1) // kol
         tw = (W - 80 - (kol - 1) * tus) // kol
@@ -1743,6 +1760,8 @@ class App:
                 x, y = cx - 110 + cc * 55 + 27, cy - 110 + rr * 55 + 27
                 pygame.draw.circle(d, onder, (x, y + 3), 22)
                 pygame.draw.circle(d, boven, (x, y), 22)
+        elif soort == "bez":
+            bezorger.menu_plaatje(d, cx, cy, aan)
         elif soort == "duel":
             for i, sl in enumerate(("wolf", "draak", "engel")):
                 rr = pygame.Rect(cx - 150 + i * 102, cy - 85 + (12 if i != 1 else 0), 96, 140)
@@ -1980,6 +1999,7 @@ ganzenbord.UI = sys.modules[__name__]
 domino.UI = sys.modules[__name__]
 reversi.UI = sys.modules[__name__]
 duel.UI = sys.modules[__name__]
+bezorger.UI = sys.modules[__name__]
 
 
 if __name__ == "__main__":
