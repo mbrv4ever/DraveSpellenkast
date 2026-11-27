@@ -42,7 +42,7 @@ import online
 import json
 import secrets
 
-VERSIE = "0.18.0"
+VERSIE = "0.18.1"
 W, H = 1280, 800
 
 
@@ -96,7 +96,7 @@ TX = {
     "lingo_c3": ("Om de beurt met de computer - moeilijk", "Take turns with the computer - hard"),
     "rev": ("Reversi", "Reversi"), "rev_sub": ("Sluit zijn schijven in, dan draaien ze om", "Trap his discs and they flip over"),
     "online_rev": ("Reversi online", "Reversi online"),
-    "duel": ("DraveDuel", "DraveDuel"), "duel_sub": ("Kaartspel: wezens, spreuken en draken", "Card game: creatures, spells and dragons"),
+    "duel": ("DraveMagie", "DraveMagic"), "duel_sub": ("Kaartspel: wezens, spreuken en draken", "Card game: creatures, spells and dragons"),
     "domino": ("Domino", "Dominoes"), "domino_sub": ("Leg aan met hetzelfde aantal ogen", "Match the same number of pips"),
     "online_domino": ("Domino online", "Dominoes online"),
     "kies_muis": ("Wijs een spel aan om te lezen wat het is, klik om te spelen.", "Point at a game to read what it is, click to play."),
@@ -221,7 +221,7 @@ TX = {
                      "Alle ingesloten schijven draaien om naar jouw kleur. Kun je niet zetten, dan pas je vanzelf.\n"
                      "Is het bord vol (of kan niemand meer), dan wint wie de meeste schijven heeft. Hoeken zijn goud waard!\n"
                      "Hulp aan: stipjes = hier mag je zetten, en je ziet hoeveel schijven er omdraaien.\n"
-                     "DRAVEDUEL: kies een stok: Woud en Vuur (wezens, aanvallen) of Licht en Water (spreuken, verdediging). Je hebt 20 levens.\n"
+                     "DRAVEMAGIE: kies een stok: Woud en Vuur (wezens, aanvallen) of Licht en Water (spreuken, verdediging). Je hebt 20 levens.\n"
                      "Elke beurt krijg je 1 mana meer (tot 8) en trek je 1 kaart. Het blauwe getal op een kaart is wat hij kost.\n"
                      "Klik een kaart om hem te spelen. Een wezen moet 1 beurt wennen; met Haast valt hij meteen aan.\n"
                      "Aanvallen: klik je wezen, dan een vijandelijk wezen of de held. Ze slaan elkaar met hun kracht (geel) van hun leven (rood) af.\n"
@@ -287,7 +287,7 @@ TX = {
                      "All trapped discs flip to your colour. If you cannot move, you pass automatically.\n"
                      "When the board is full (or nobody can move), whoever has the most discs wins. Corners are gold!\n"
                      "Help on: dots = you may play here, and you see how many discs flip.\n"
-                     "DRAVEDUEL: choose a deck: Forest and Fire (creatures, attacks) or Light and Water (spells, defence). You have 20 life.\n"
+                     "DRAVEMAGIC: choose a deck: Forest and Fire (creatures, attacks) or Light and Water (spells, defence). You have 20 life.\n"
                      "Each turn you get 1 more mana (up to 8) and draw 1 card. The blue number on a card is its cost.\n"
                      "Click a card to play it. A creature needs 1 turn to settle; with Haste it attacks at once.\n"
                      "Attack: click your creature, then an enemy creature or the hero. They hit each other's health (red) with their power (yellow).\n"
@@ -353,7 +353,7 @@ NIEUW.update({
 })
 SPEL_SCHERMEN = ("bg", "topo", "vier", "zee", "wie", "dam", "schaak", "galg", "memo") + tuple(NIEUW)
 REGEL_KOP = {"bg": ("BACKGAMMON", "BACKGAMMON"), "topo": ("TOPOGRAFIE", "TOPOGRAPHY"), "vier": ("VIER OP EEN RIJ", "CONNECT FOUR"),
-             "zee": ("ZEESLAG", "BATTLESHIP"), "wie": ("WIE BEN IK?", "GUESS WHO?"), "dam": ("DAMMEN", "DRAUGHTS"), "schaak": ("SCHAKEN", "CHESS"), "galg": ("GALGJE", "HANGMAN"), "memo": ("MEMORY", "MEMORY"), "lingo": ("LINGO", "LINGO"), "sudoku": ("SUDOKU", "SUDOKU"), "puzzel": ("PUZZEL", "PUZZLE"), "pest": ("PESTEN", "CRAZY EIGHTS"), "gans": ("GANZENBORD", "GAME OF THE GOOSE"), "domino": ("DOMINO", "DOMINOES"), "rev": ("REVERSI", "REVERSI"), "duel": ("DRAVEDUEL", "DRAVEDUEL")}
+             "zee": ("ZEESLAG", "BATTLESHIP"), "wie": ("WIE BEN IK?", "GUESS WHO?"), "dam": ("DAMMEN", "DRAUGHTS"), "schaak": ("SCHAKEN", "CHESS"), "galg": ("GALGJE", "HANGMAN"), "memo": ("MEMORY", "MEMORY"), "lingo": ("LINGO", "LINGO"), "sudoku": ("SUDOKU", "SUDOKU"), "puzzel": ("PUZZEL", "PUZZLE"), "pest": ("PESTEN", "CRAZY EIGHTS"), "gans": ("GANZENBORD", "GAME OF THE GOOSE"), "domino": ("DOMINO", "DOMINOES"), "rev": ("REVERSI", "REVERSI"), "duel": ("DRAVEMAGIE", "DRAVEMAGIC")}
 
 
 def regels_voor(scherm):

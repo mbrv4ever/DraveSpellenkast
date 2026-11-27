@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DraveSpellenkast - DraveDuel: een kaartspel met wezens en spreuken (27-11-2026, idee van pa).
+"""DraveSpellenkast - DraveMagie: een kaartspel met wezens en spreuken (27-11-2026, idee van pa).
 Twee stokken: Woud en Vuur (rood-groen: wezens en aanvallen) en Licht en Water (blauw-wit: spreuken en verdediging).
 Elke beurt krijg je 1 mana meer. Speel wezens en spreuken, val aan, en breng de ander van 20 naar 0 levens.
 Combinaties maken het slim: wolven worden sterker in een roedel, uilen laten je kaarten trekken, enzovoort.
@@ -20,7 +20,7 @@ KW, KH = 118, 168          # kaart in de hand
 VW, VH = 112, 140          # wezen op het veld
 
 TX = {
-    "duel": ("DraveDuel", "DraveDuel"),
+    "duel": ("DraveMagie", "DraveMagic"),
     "kies_stok": ("Kies je stok", "Choose your deck"),
     "stok_rg": ("Woud en Vuur", "Forest and Fire"),
     "stok_rg_sub": ("Rood-groen: veel wezens, hard aanvallen, wolven in een roedel.",
