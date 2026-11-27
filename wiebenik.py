@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""DraveSpellenkast - Wie ben ik? (tegen de computer; online volgt).
+"""DraveSpellenkast - Wie ben ik? (tegen de computer, of online tegen elkaar).
 24 zelfgetekende figuurtjes. Kies een ja/nee-vraag uit de lijst, klap om wie het niet kan zijn, en raad wie de ander heeft.
 Copyright (C) 2026 Dravenlock (Roger & Claudio). GNU GPL v3.0."""
 import random

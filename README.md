@@ -1,6 +1,6 @@
 # DraveSpellenkast
 
-**17 spellen in één kast.** Tegen de computer (makkelijk, normaal of moeilijk) of **online tegen elkaar**, ieder op zijn eigen pc. Gratis, zonder reclame en zonder account.
+**18 spellen in één kast.** Tegen de computer (makkelijk, normaal of moeilijk) of **online tegen elkaar**, ieder op zijn eigen pc. Gratis, zonder reclame en zonder account.
 
 ![Het menu van DraveSpellenkast](docs/menu.png)
 
@@ -19,7 +19,7 @@
 | **Schaken** – met **10 korte lessen** voor wie het nog nooit deed | **Galgje** | **Memory** – zelf getekende plaatjes |
 | **Lingo** – net als op tv | **Reversi** | **Domino** |
 | **Ganzenbord** – met de put, het doolhof en de dood | **Pesten** – alle pestkaarten | **Puzzel** – met de kunst van Roger |
-| **Sudoku** – elke puzzel nieuw, altijd één oplossing | | |
+| **Sudoku** – elke puzzel nieuw, altijd één oplossing | **DraveDuel** – kaartspel met wezens, spreuken en draken | |
 
 Bij bijna elk spel: **Hulp aan/uit** (laat zien wat mag en waar gevaar zit) en een **Tip**-knop. De spelregels van het spel dat je speelt staan achter de knop **Spelregels**.
 
@@ -28,12 +28,14 @@ Bij bijna elk spel: **Hulp aan/uit** (laat zien wat mag en waar gevaar zit) en e
 | ![Dammen](docs/dammen.png) | ![Schaakles](docs/schaakles.png) | ![Lingo](docs/lingo.png) |
 | **Pesten** | **Ganzenbord** | **Puzzel** |
 | ![Pesten](docs/pesten.png) | ![Ganzenbord](docs/ganzenbord.png) | ![Puzzel](docs/puzzel.png) |
+| **DraveDuel** | | |
+| ![DraveDuel](docs/duel.png) | | |
 
 ## 🌐 Online spelen
 
 Kies bij een spel **Online: op twee pc's**. De een klikt **Nieuwe kamer maken** en krijgt een code van 6 tekens; de ander typt die code en klikt **Meedoen**. Verbinding weg? Hij verbindt vanzelf opnieuw en het bord klopt weer. De server bewaart alleen het spel zelf, niets over jou.
 
-*Versie 0.17.0*
+*Versie 0.18.0*
 
 ## ⬇️ Downloaden (Windows, geen Python nodig)
 

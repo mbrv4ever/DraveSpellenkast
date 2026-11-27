@@ -37,11 +37,12 @@ import pesten
 import ganzenbord
 import domino
 import reversi
+import duel
 import online
 import json
 import secrets
 
-VERSIE = "0.17.0"
+VERSIE = "0.18.0"
 W, H = 1280, 800
 
 
@@ -95,6 +96,7 @@ TX = {
     "lingo_c3": ("Om de beurt met de computer - moeilijk", "Take turns with the computer - hard"),
     "rev": ("Reversi", "Reversi"), "rev_sub": ("Sluit zijn schijven in, dan draaien ze om", "Trap his discs and they flip over"),
     "online_rev": ("Reversi online", "Reversi online"),
+    "duel": ("DraveDuel", "DraveDuel"), "duel_sub": ("Kaartspel: wezens, spreuken en draken", "Card game: creatures, spells and dragons"),
     "domino": ("Domino", "Dominoes"), "domino_sub": ("Leg aan met hetzelfde aantal ogen", "Match the same number of pips"),
     "online_domino": ("Domino online", "Dominoes online"),
     "kies_muis": ("Wijs een spel aan om te lezen wat het is, klik om te spelen.", "Point at a game to read what it is, click to play."),
@@ -219,6 +221,12 @@ TX = {
                      "Alle ingesloten schijven draaien om naar jouw kleur. Kun je niet zetten, dan pas je vanzelf.\n"
                      "Is het bord vol (of kan niemand meer), dan wint wie de meeste schijven heeft. Hoeken zijn goud waard!\n"
                      "Hulp aan: stipjes = hier mag je zetten, en je ziet hoeveel schijven er omdraaien.\n"
+                     "DRAVEDUEL: kies een stok: Woud en Vuur (wezens, aanvallen) of Licht en Water (spreuken, verdediging). Je hebt 20 levens.\n"
+                     "Elke beurt krijg je 1 mana meer (tot 8) en trek je 1 kaart. Het blauwe getal op een kaart is wat hij kost.\n"
+                     "Klik een kaart om hem te spelen. Een wezen moet 1 beurt wennen; met Haast valt hij meteen aan.\n"
+                     "Aanvallen: klik je wezen, dan een vijandelijk wezen of de held. Ze slaan elkaar met hun kracht (geel) van hun leven (rood) af.\n"
+                     "Wacht (gouden rand) moet eerst verslagen worden. Wolven worden sterker in een roedel. Breng de ander naar 0: gewonnen!\n"
+                     "Hulp aan: groen = dit kan je nu doen. Tip (of de T-toets) wijst de beste zet aan. Muis op een kaart = grote kaart met uitleg.\n"
                      "DOMINO: iedereen krijgt 7 stenen, de rest ligt in de pot. Om de beurt leg je een steen aan een uiteinde.\n"
                      "Het aantal ogen moet gelijk zijn aan het uiteinde. Past geen steen, dan pak je er een uit de pot. Is de pot leeg: passen.\n"
                      "Wie het eerst al zijn stenen kwijt is, wint en krijgt de ogen van de ander als punten. Kan niemand meer: minste ogen wint.\n"
@@ -279,6 +287,12 @@ TX = {
                      "All trapped discs flip to your colour. If you cannot move, you pass automatically.\n"
                      "When the board is full (or nobody can move), whoever has the most discs wins. Corners are gold!\n"
                      "Help on: dots = you may play here, and you see how many discs flip.\n"
+                     "DRAVEDUEL: choose a deck: Forest and Fire (creatures, attacks) or Light and Water (spells, defence). You have 20 life.\n"
+                     "Each turn you get 1 more mana (up to 8) and draw 1 card. The blue number on a card is its cost.\n"
+                     "Click a card to play it. A creature needs 1 turn to settle; with Haste it attacks at once.\n"
+                     "Attack: click your creature, then an enemy creature or the hero. They hit each other's health (red) with their power (yellow).\n"
+                     "Guards (gold border) must be defeated first. Wolves grow stronger in a pack. Bring the other to 0: you win!\n"
+                     "Help on: green = you can do this now. Tip (or the T key) points at the best move. Mouse on a card = big card with explanation.\n"
                      "DOMINOES: everyone gets 7 stones, the rest is the pile. Take turns adding a stone to an end.\n"
                      "The number of pips must match that end. No stone fits? Draw one from the pile. Pile empty: pass.\n"
                      "First to play all stones wins and scores the other's pips. If nobody can move: fewest pips wins.\n"
@@ -330,12 +344,16 @@ NIEUW.update({
                "keuzes": [("puz_1", 1), ("puz_2", 2), ("puz_3", 3), ("puz_4", 4)]},
 })
 NIEUW.update({
+    "duel": {"mod": "duel", "klasse": "Duel", "online": None,
+             "keuzes": [("comp_mak", 1), ("comp_normaal", 2), ("comp_moeilijk", 3)]},
+})
+NIEUW.update({
     "sudoku": {"mod": "sudoku", "klasse": "Sudoku", "online": None,
                "keuzes": [("sud_1", 1), ("sud_2", 2), ("sud_3", 3)]},
 })
 SPEL_SCHERMEN = ("bg", "topo", "vier", "zee", "wie", "dam", "schaak", "galg", "memo") + tuple(NIEUW)
 REGEL_KOP = {"bg": ("BACKGAMMON", "BACKGAMMON"), "topo": ("TOPOGRAFIE", "TOPOGRAPHY"), "vier": ("VIER OP EEN RIJ", "CONNECT FOUR"),
-             "zee": ("ZEESLAG", "BATTLESHIP"), "wie": ("WIE BEN IK?", "GUESS WHO?"), "dam": ("DAMMEN", "DRAUGHTS"), "schaak": ("SCHAKEN", "CHESS"), "galg": ("GALGJE", "HANGMAN"), "memo": ("MEMORY", "MEMORY"), "lingo": ("LINGO", "LINGO"), "sudoku": ("SUDOKU", "SUDOKU"), "puzzel": ("PUZZEL", "PUZZLE"), "pest": ("PESTEN", "CRAZY EIGHTS"), "gans": ("GANZENBORD", "GAME OF THE GOOSE"), "domino": ("DOMINO", "DOMINOES"), "rev": ("REVERSI", "REVERSI")}
+             "zee": ("ZEESLAG", "BATTLESHIP"), "wie": ("WIE BEN IK?", "GUESS WHO?"), "dam": ("DAMMEN", "DRAUGHTS"), "schaak": ("SCHAKEN", "CHESS"), "galg": ("GALGJE", "HANGMAN"), "memo": ("MEMORY", "MEMORY"), "lingo": ("LINGO", "LINGO"), "sudoku": ("SUDOKU", "SUDOKU"), "puzzel": ("PUZZEL", "PUZZLE"), "pest": ("PESTEN", "CRAZY EIGHTS"), "gans": ("GANZENBORD", "GAME OF THE GOOSE"), "domino": ("DOMINO", "DOMINOES"), "rev": ("REVERSI", "REVERSI"), "duel": ("DRAVEDUEL", "DRAVEDUEL")}
 
 
 def regels_voor(scherm):
@@ -1593,6 +1611,7 @@ class App:
                   ("pest", "pest_sub", lambda: self.kies_nieuw("pest"), True),
                   ("puzzel", "puzzel_sub", lambda: self.kies_nieuw("puzzel"), True),
                   ("sudoku", "sudoku_sub", lambda: self.kies_nieuw("sudoku"), True),
+                  ("duel", "duel_sub", lambda: self.kies_nieuw("duel"), True),
                   ("meer", "meer_sub", None, False)]
         kol = 3 if len(tegels) <= 6 else 4 if len(tegels) <= 12 else 6
         tus = 20 if kol < 6 else 14
@@ -1724,6 +1743,10 @@ class App:
                 x, y = cx - 110 + cc * 55 + 27, cy - 110 + rr * 55 + 27
                 pygame.draw.circle(d, onder, (x, y + 3), 22)
                 pygame.draw.circle(d, boven, (x, y), 22)
+        elif soort == "duel":
+            for i, sl in enumerate(("wolf", "draak", "engel")):
+                rr = pygame.Rect(cx - 150 + i * 102, cy - 85 + (12 if i != 1 else 0), 96, 140)
+                duel.teken_kaart(d, sl, rr, aan=aan)
         elif soort == "domino":
             dm = domino.Domino.__new__(domino.Domino)
             for i, (a, b) in enumerate(((6, 3), (3, 3), (3, 5))):
@@ -1956,6 +1979,7 @@ pesten.UI = sys.modules[__name__]
 ganzenbord.UI = sys.modules[__name__]
 domino.UI = sys.modules[__name__]
 reversi.UI = sys.modules[__name__]
+duel.UI = sys.modules[__name__]
 
 
 if __name__ == "__main__":
